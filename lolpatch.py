@@ -1,16 +1,29 @@
-from helpers import split_version, join_version, verify_patch_version
-from update_patch_versions import update_patch_version, get_latest_version
+from helpers import split_version, join_version, verify_patch_version, get_latest_version
+from update_patch_versions import update_patch_version
 
 import argparse
 from bs4 import BeautifulSoup
 import re
 import sys
+import csv
+
+def retrieve_patch_versions():
+    f = open('patch_versions.csv')
+    try:
+        r = csv.reader(f, delimiter=',')
+        versions = list(r)
+    finally:
+        f.close()
+
+    return versions[0]  
 
 
 def main(version, language):
-    versions = update_patch_version()
-    print(versions)
-    
+
+
+    print(version, language)
+    print(retrieve_patch_versions())
+
     # print(version)
     # major_version, minor_version = split_version(version)
     # patch_notes_url = f'https://www.leagueoflegends.com/{language}/news/game-updates/patch-{version[:2]}-{version[3:]}-notes/'

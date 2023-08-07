@@ -3,21 +3,10 @@ from helpers import split_version, join_version, verify_patch_version
 from typing import Final
 import requests
 from bs4 import BeautifulSoup
+import csv
 
 INITIAL_VERSION: Final = '9.1'
 
-def get_latest_version():
-    patch_list_url = f'https://www.leagueoflegends.com/en-us/news/tags/patch-notes/'
-    patch_list_page = requests.get(patch_list_url)
-    patch_list_soup = BeautifulSoup(patch_list_page.content, 'html.parser')
-
-    patch_list = patch_list_soup.find_all('li')
-
-    most_recent_patch = patch_list[0]
-    title = most_recent_patch.find('h2').text
-    version = title.split(' ')[1]
-    
-    return version
 
 def update_patch_version():
     versions = []
@@ -37,3 +26,13 @@ def update_patch_version():
         minor_version = 1
 
     return versions
+
+def main(): 
+    versions = update_patch_version()
+
+    with open('patch_versions.csv', 'w', newline='') as f:
+        write = csv.writer(f)
+        write.writerow(versions)
+
+if __name__ == '__main__':
+    main()
